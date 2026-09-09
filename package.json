@@ -1,0 +1,13 @@
+{
+  "name": "prototipo-redis-seminario",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Laboratório didático de Redis para apresentação acadêmica.",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

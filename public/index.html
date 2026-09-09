@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0b1220" />
+    <title>Redis Lab — protótipo didático</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="Redis Lab início">
+          <span class="brand-mark">R</span>
+          <span>
+            <strong>redis<span class="brand-dot">.</span>lab</strong>
+            <small>protótipo didático</small>
+          </span>
+        </a>
+        <div class="topbar-actions">
+          <div class="connection-pill" id="connection-pill">
+            <span class="status-dot"></span>
+            <span id="connection-label">verificando Redis…</span>
+          </div>
+          <button class="button button-ghost" id="refresh-button" type="button" title="Atualizar dados">
+            <span aria-hidden="true">↻</span>
+            Atualizar
+          </button>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero section-wrap">
+          <div class="hero-copy">
+            <div class="kicker"><span class="kicker-line"></span> laboratório de banco de dados</div>
+            <h1>Veja o Redis<br /><em>pensando em chaves.</em></h1>
+            <p class="hero-lede">Um playground pequeno para enxergar, na prática, como um banco key-value organiza dados em memória e responde com comandos simples.</p>
+            <div class="hero-actions">
+              <button class="button button-primary" id="run-all-button" type="button">
+                Rodar roteiro completo <span aria-hidden="true">→</span>
+              </button>
+              <button class="button button-text" id="reset-button" type="button">Limpar laboratório</button>
+            </div>
+          </div>
+          <div class="hero-art" aria-hidden="true">
+            <div class="orbit orbit-one"></div>
+            <div class="orbit orbit-two"></div>
+            <div class="hero-key-card">
+              <div class="hero-key-top"><span class="mini-dot"></span> chave → valor</div>
+              <div class="hero-key-name">seminario:usuario:01</div>
+              <div class="hero-key-value"><span>{</span> “status”: “ativo” <span>}</span></div>
+              <div class="hero-key-footer"><span>RAM</span><span>O(1)</span><span>atômico</span></div>
+            </div>
+            <div class="floating-label label-left">01 <span>chave</span></div>
+            <div class="floating-label label-right">∞ <span>estruturas</span></div>
+          </div>
+        </section>
+
+        <section class="stats section-wrap" aria-label="Resumo do Redis">
+          <article class="stat-card">
+            <span class="stat-icon coral-icon">↯</span>
+            <div><strong>RAM first</strong><span>respostas rápidas</span></div>
+          </article>
+          <article class="stat-card">
+            <span class="stat-icon mint-icon">K/V</span>
+            <div><strong>key-value</strong><span>chave aponta para valor</span></div>
+          </article>
+          <article class="stat-card">
+            <span class="stat-icon gold-icon">≋</span>
+            <div><strong>7 exemplos</strong><span>do básico ao rate limit</span></div>
+          </article>
+        </section>
+
+        <section class="workspace section-wrap">
+          <aside class="demo-nav panel">
+            <div class="panel-heading nav-heading">
+              <div><span class="eyebrow">escolha uma cena</span><h2>Estruturas</h2></div>
+              <span class="count-badge">07</span>
+            </div>
+            <nav id="demo-list" aria-label="Demonstrações Redis"></nav>
+          </aside>
+
+          <section class="lab panel" aria-live="polite">
+            <div class="lab-heading">
+              <div>
+                <span class="eyebrow" id="demo-number">estrutura 01</span>
+                <h2 id="demo-title">Strings <span class="heading-arrow">↗</span></h2>
+              </div>
+              <button class="button button-run" id="run-button" type="button"><span class="play-icon">▶</span> Executar exemplo</button>
+            </div>
+
+            <div class="explanation" id="demo-description"></div>
+
+            <div class="command-strip">
+              <div class="strip-label"><span class="terminal-icon">$_</span> comandos usados</div>
+              <div class="command-chips" id="command-chips"></div>
+            </div>
+
+            <div class="result-grid">
+              <div class="result-column">
+                <div class="subheading"><span class="live-marker"></span><span>saída da execução</span><span class="subheading-muted">últimos comandos</span></div>
+                <div class="terminal" id="terminal-output">
+                  <div class="terminal-empty">Execute um exemplo para acompanhar os comandos.</div>
+                </div>
+              </div>
+              <div class="result-column data-column">
+                <div class="subheading"><span>estado do laboratório</span><button class="icon-button" id="state-refresh" type="button" title="Atualizar estado">↻</button></div>
+                <div class="data-stack" id="data-stack">
+                  <div class="data-empty">Nenhuma chave de demonstração ainda.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="console-block">
+              <div class="subheading"><span class="terminal-icon small-terminal">$_</span><span>console livre</span><span class="subheading-muted">somente namespace seminario:</span></div>
+              <form class="console-form" id="console-form">
+                <span class="console-prompt">redis&gt;</span>
+                <input id="command-input" autocomplete="off" spellcheck="false" placeholder='SET seminario:teste "olá"' aria-label="Comando Redis" />
+                <button type="submit" class="send-command" title="Executar comando">↵</button>
+              </form>
+              <div class="console-response" id="console-response">Experimente: <code>SET seminario:teste "olá"</code> e depois <code>GET seminario:teste</code>.</div>
+            </div>
+          </section>
+        </section>
+
+      </main>
+
+      <footer class="footer section-wrap">
+        <span>Redis Lab · Seminário de Banco de Dados</span>
+        <span>namespace protegido: <code>seminario:*</code></span>
+      </footer>
+    </div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="/app.js" defer></script>
+  </body>
+</html>
